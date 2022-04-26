@@ -45,11 +45,51 @@ def mostrarTodosProfesionales (conexion):
         conexion.commit()
         
         return("Error al obtener los profesionales, error: ",error)
+    
+    
 
-
-def crearProfesional(idProfesional,nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,conexion):
+#funcion para obtener un profesional en concreto 
+    
+    
+def obtenerProfesional(conexion,codigoPostalProfesional,profesionProfesional):
     try:
-        insert = f"INSERT INTO autonomos.Profesionales (idProfesional,nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional) VALUES ('{idProfesional}','{nombreProfesional}','{apellidosProfesional}','{fechaNacimientoProfesional}','{profesionProfesional}','{telefonoProfesional}','{codigoPostalProfesional}','{contrasenaProfesional}','{descripcionProfesional}','{dniProfesional}','{direccionProfesional}')"
+        select = f"SELECT * FROM autonomos.Profesionales WHERE profesionProfesional = '{profesionProfesional}' AND codigoPostalProfesional = '{codigoPostalProfesional}' "
+        curr = conexion.cursor()
+        curr.execute(select)
+        rows = curr.fetchall()
+        listaProfesionales = []
+        
+        for row in rows :
+            
+            jsonDevuelto = {
+                "idProfesional": row[0],
+                "nombreProfesional": row[1],
+                "apellidosProfesional": row[2],
+                "fechaNacimientoProfesional": row[3],
+                "profesionProfesional": row[4],
+                "telefonoProfesional": row[5],
+                "codigoPostalProfesional": row[6],
+                "contrasenaProfesional": row[7],
+                "descripcionProfesional": row[8],
+                "dniProfesional": row[9],
+                "direccionProfesional": row[10]
+            }
+            
+            listaProfesionales.append(jsonDevuelto)
+        conexion.commit()
+        
+        return listaProfesionales
+
+    except pymysql.Error as error:
+        
+        conexion.commit()
+        
+        return("Error al obtener los profesionales, error: ",error)
+
+
+def crearProfesional(nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,conexion):
+    try:
+        insert = f"INSERT INTO autonomos.Profesionales (nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional) VALUES ('{nombreProfesional}','{apellidosProfesional}','{fechaNacimientoProfesional}','{profesionProfesional}','{telefonoProfesional}','{codigoPostalProfesional}','{contrasenaProfesional}','{descripcionProfesional}','{dniProfesional}','{direccionProfesional}')"
         curr = conexion.cursor()
         curr.execute(insert)
         conexion.commit()
@@ -63,9 +103,9 @@ def crearProfesional(idProfesional,nombreProfesional,apellidosProfesional,fechaN
         return("Error al crear el profesional, error: ",error)
     
 
-def eliminarProfesional(idProfesional,conexion):
+def eliminarProfesional(dniProfesional,conexion):
     try:
-        delete = f"DELETE FROM autonomos.Profesionales WHERE idProfesional = '{idProfesional}'"
+        delete = f"DELETE FROM autonomos.Profesionales WHERE dniProfesional = '{dniProfesional}'"
         curr = conexion.cursor()
         curr.execute(delete)
         conexion.commit()
@@ -128,9 +168,9 @@ def mostrarTodosEmpleos (conexion):
         return("Error al obtener los empleos, error: ",error)
     
 
-def crearEmpleo(idEmpleo,nombreEmpleo,precioHora,conexion):
+def crearEmpleo(nombreEmpleo,precioHora,conexion):
     try:
-        insert = f"INSERT INTO autonomos.Empleos (idEmpleo,nombreEmpleo,precioHora) VALUES ('{idEmpleo}','{nombreEmpleo}','{precioHora}')"
+        insert = f"INSERT INTO autonomos.Empleos (nombreEmpleo,precioHora) VALUES ('{nombreEmpleo}','{precioHora}')"
         curr = conexion.cursor()
         curr.execute(insert)
         conexion.commit()
@@ -195,11 +235,11 @@ def mostrarTodosUsuarios(conexion):
                 "dniUsuario": row[1],
                 "nombreUsuario": row[2],
                 "apellidosUsuario": row[3],
-                "fechaNacimientoUsuario": row[4],
-                "direccionUsuario": row[5],
-                "contrasenaUsuario": row[6],
-                "telefonoUsuario": row[7],
-                "codigoPostalUsuario": row[8],
+                "direccionUsuario": row[4],
+                "contrasenaUsuario": row[5],
+                "telefonoUsuario": row[6],
+                "codigoPostalUsuario": row[7],
+                "fechaNacimientoUsuario": row[8],
             }
             
             listaUsuarios.append(jsonDevuelto)
@@ -261,3 +301,4 @@ def modificarUsuario(idUsuario,dniUsuario,nombreUsuario,apellidosUsuario,fechaNa
         conexion.commit()
         
         return("Error al modificar el usuario, error: ",error)
+

@@ -1,23 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import Inicio from './Inicio.jsx';
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Registro from './Registro';
+import Login from './Login';
+import ParrillaAnuncios from './ParrillaAnuncios';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+        
+  
+    <Router>
+      <Routes>
+      <Route path="/" element={<Inicio></Inicio>} exact>
+      </Route>
+      <Route path="/login" element={<Login></Login>} >
+      </Route>
+      <Route path="/registro" element={<Registro></Registro>} >
+      </Route>
+      <Route path="/parrillaAnuncios" element={<ParrillaAnuncios></ParrillaAnuncios>} >
+      </Route>
+
+      </Routes>
+    </Router>
+
     </div>
   );
 }
