@@ -42,17 +42,27 @@ function Inicio(){
             <Logo></Logo>
             <div className='contenedorForm'>
                 <Form id="formPeticion">
-                <Form.Group className="mb-3">
-                            <Form.Label>Código Postal</Form.Label>
-                            <Form.Control type="number" onChange={handleInputChange} id="codigoPostalProfesional" name="codigoPostalProfesional"/>
-                            <Form.Text className="text-muted">
-                            Escribe el código postal de tu localidad.
-                            </Form.Text>
+
+
+                <Form.Group className="mb-3" controlId="distrito">
+                    <Form.Label>Profesion</Form.Label>
+                    <Form.Select onChange={handleInputChange} id="profesionProfesional" name="profesionProfesional">
+                        <option value="1">Fontanero</option>
+                        <option value="2">Carpintero</option>
+                        <option value="3">Cristalero</option>
+                    </Form.Select>
                 </Form.Group>
-                <Form.Group className="mb-3">
-                            <Form.Label>Profesional Requerido</Form.Label>
-                            <Form.Control type="text" onChange={handleInputChange} id="profesionProfesional" name="profesionProfesional"/>
+
+                <Form.Group className="mb-3" controlId="distrito">
+                    <Form.Label>Distrito</Form.Label>
+                    <Form.Select onChange={handleInputChange} id="codigoPostalProfesional" name="codigoPostalProfesional">
+                        <option value="1">CENTRO-METROPOLITANO</option>
+                        <option value="2">NORDESTE</option>
+                        <option value="3">SUR</option>
+                    </Form.Select>
                 </Form.Group>
+
+
                 <Button variant="dark" onClick={cambiarRuta}>
                             Ver Profesionales
                 </Button>

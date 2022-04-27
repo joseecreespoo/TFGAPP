@@ -1,34 +1,16 @@
 from distutils.command.config import config
-from colorama import Cursor
 from fastapi import FastAPI
 from backend import *
-import pymysql
-import mysql.connector
+from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
 #establecemos la configuracion para conectarnos por MYSQL a la base de datos
 
-config = {
-    'user': 'root',
-    'password': 'root',
-    'host': 'localhost',
-    'unix_socket': '/Applications/MAMP/tmp/mysql/mysql.sock',
-    'database': 'autonomos',
-    'raise_on_warnings': True
-}
+
 
 #generamos la conexion y el cursor, en caso de error devolvemos el error generado
 
-try:
-    conexion = mysql.connector.connect(**config)
-    
-    cursor = conexion.cursor(dictionary=True)
-    
-    print("Se ha conectado correcatamente a la base de datos")
-    
-except pymysql.Error as error:
-    
-    print("Error al conectar a la base de datos, error: ",error)
+
     
 #creamos la api
 
@@ -41,6 +23,7 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:3000",
+    "http://localhost:3000/parrillaAnuncios",
 ]
 
 app.add_middleware(
@@ -50,6 +33,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+class Login(BaseModel):
+    emailProfesional: str
+    contrasenaProfesional: str
+
+
 
 
 
@@ -66,92 +56,36 @@ app.add_middleware(
 @app.get("/mostrarTodosProfesionales")
 
 def getMostrarTodosProfesionales():
-    return mostrarTodosProfesionales(conexion)
+    return mostrarTodosProfesionales()
 
 #crear un profesional
 
 @app.post("/crearProfesional")
 
-def postCrearProfesional(nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional):
-    return crearProfesional(nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,conexion)
+def postCrearProfesional(nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,distritoProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,precioHoraProfesional,publicado,emailProfesional):
+    return crearProfesional(nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,distritoProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,precioHoraProfesional,publicado,emailProfesional)
 
 #eliminar un profesional
 
 @app.post("/eliminarProfesional/{dniProfesional}")
 
 def postEliminarProfesional(dniProfesional):
-    return eliminarProfesional(dniProfesional,conexion)
+    return eliminarProfesional(dniProfesional)
 
 #modificar un profesional
 
 @app.post("/modificarProfesional")
 
-def postModificarProfesional(idProfesional,nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional):
-    return modificarProfesional(idProfesional,nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,conexion)
+def postModificarProfesional(idProfesional,nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,precioHoraProfesional,publicado,emailProfesional):
+    return modificarProfesional(idProfesional,nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,precioHoraProfesional,publicado,emailProfesional)
 
-@app.post("/buscarProfesional/{codigoPostalProfesional}/{profesionProfesional}")
-def postBuscarProfesional(codigoPostalProfesional,profesionProfesional):
-    return obtenerProfesional(conexion,codigoPostalProfesional,profesionProfesional)
-
-
-#EMPLEOS#
-
-#mostrar todos los empleos
-
-@app.get("/mostrarTodosEmpleos")
-
-def getMostrarTodosEmpleos():
-    return mostrarTodosEmpleos(conexion)
+@app.post("/buscarProfesional/{distritoProfesional}/{profesionProfesional}")
+async def postBuscarProfesional(distritoProfesional,profesionProfesional):
+    return obtenerProfesional(distritoProfesional,profesionProfesional)
 
 
-#crear un empleo
+#logea el profesional
 
-@app.post("/crearEmpleo")
-
-def postCrearEmpleo(nombreEmpleo,precioHora):
-    return crearEmpleo(nombreEmpleo,precioHora,conexion)
-
-#eliminar un empleo
-
-@app.post("/eliminarEmpleo/{idEmpleo}")
-def postEliminarEmpleo(idEmpleo):
-    return eliminarEmpleo(idEmpleo,conexion)
-
-#modificar un empleo
-
-@app.post("/modificarEmpleo/")
-def postModificarEmpleo(idEmpleo,nombreEmpleo,precioHora):
-    return modificarEmpleo(idEmpleo,nombreEmpleo,precioHora,conexion)
-
-
-#USUARIOS#
-
-#mostrar todos los usuarios
-
-@app.get("/mostrarTodosUsuarios")
-
-def getMostrarTodosUsuarios():
-    return mostrarTodosUsuarios(conexion)
-
-#crear un usuario
-
-@app.post("/crearUsuario")
-
-def postCrearUsuario(dniUsuario,nombreUsuario,apellidosUsuario,fechaNacimientoUsuario,direccionUsuario,contrasenaUsuario,telefonoUsuario,codigoPostalUsuario):
-    return crearUsuario(dniUsuario,nombreUsuario,apellidosUsuario,fechaNacimientoUsuario,direccionUsuario,contrasenaUsuario,telefonoUsuario,codigoPostalUsuario,conexion)
-
-#eliminar un usuario
-
-@app.post("/eliminarUsuario/{dniUsuario}")
-
-def postEliminarUsuario(dniUsuario):
-    return eliminarUsuario(dniUsuario,conexion)
-
-#modificar un usuario  
-
-@app.post("/modificarUsuario")
-
-
-def postModificarUsuario(idUsuario,dniUsuario,nombreUsuario,apellidosUsuario,fechaNacimientoUsuario,direccionUsuario,contrasenaUsuario,telefonoUsuario,codigoPostalUsuario):
-    return modificarUsuario(idUsuario,dniUsuario,nombreUsuario,apellidosUsuario,fechaNacimientoUsuario,direccionUsuario,contrasenaUsuario,telefonoUsuario,codigoPostalUsuario,conexion)
-    
+@app.post("/loginProfesional")
+def loginProfesional(login:Login):
+    return login

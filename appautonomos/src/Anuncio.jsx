@@ -10,6 +10,7 @@ function Anuncio(props){
 
     const telefono  = "tel:"+props.telefono+"";
 
+
     return(
         <>
             <Card style={{ width: '18rem' }}>
@@ -17,10 +18,11 @@ function Anuncio(props){
             <Card.Body>
                 <Card.Title>{props.nombre}</Card.Title>
                 <Card.Text>
-                {props.descripcion}
+                {props.apellidos}
                 </Card.Text>
             </Card.Body>
             <ListGroup className="list-group-flush">
+                <ListGroupItem>{props.descripcion}</ListGroupItem>
                 <ListGroupItem>{props.profesion}</ListGroupItem>
                 <ListGroupItem>{props.direccion}</ListGroupItem>
                 <ListGroupItem>{props.precioHora}</ListGroupItem>
