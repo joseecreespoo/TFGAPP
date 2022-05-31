@@ -4,7 +4,14 @@ import mysql.connector
 from distutils.command.config import config
 from backend import *
 import mysql.connector
+import base64
 
+
+
+
+
+
+#CREAMOS UN DICCIONARIO PARA CONECTARNOS A LA BASE DE DATOS
 config = {
     'user': 'root',
     'password': 'root',
@@ -13,6 +20,9 @@ config = {
     'database': 'autonomos',
     'raise_on_warnings': True
 }
+
+
+#REALIZAMOS LA CONEXION
 
 try:
     conexion = mysql.connector.connect(**config)
@@ -25,10 +35,10 @@ except pymysql.Error as error:
     
     print("Error al conectar a la base de datos, error: ",error)
 
-#Archivo con las funciones que llaman a la base de datos
+
 
 #################
-# Profesionales #
+# FUNCIONES #
 #################
 
 
@@ -79,7 +89,7 @@ def mostrarTodosProfesionales ():
     
 def obtenerProfesional(distritoProfesional,profesionProfesional):
     try:
-        select = f"SELECT * FROM autonomos.Profesionales WHERE profesionProfesional = '{profesionProfesional}' AND distritoProfesional = '{distritoProfesional}' AND publicado = on"
+        select = f"SELECT * FROM autonomos.Profesionales WHERE profesionProfesional = '{profesionProfesional}' AND distritoProfesional = '{distritoProfesional}' AND publicado = 'True'"
         curr = conexion.cursor()
         curr.execute(select)
         rows = curr.fetchall()
@@ -203,3 +213,48 @@ def comprobarProfesional(emailProfesional,contrasenaProfesional):
         conexion.commit()
         
         return("Error al obtener los profesionales, error: ",error)
+    
+    
+    
+def obtenerProfesionalId(idProfesional):
+    try:
+        select = f"SELECT * FROM autonomos.Profesionales WHERE idProfesional = '{idProfesional}'"
+        curr = conexion.cursor()
+        curr.execute(select)
+        rows = curr.fetchall()
+        listaProfesionales = []
+        
+        for row in rows :
+            
+            jsonDevuelto = {
+                "idProfesional": row[0],
+                "nombreProfesional": row[1],
+                "apellidosProfesional": row[2],
+                "fechaNacimientoProfesional": row[3],
+                "profesionProfesional": row[4],
+                "telefonoProfesional": row[5],
+                "distritoProfesional": row[6],
+                "contrasenaProfesional": row[7],
+                "descripcionProfesional": row[8],
+                "dniProfesional": row[9],
+                "direccionProfesional": row[10],
+                "precioHoraProfesional": row[11],
+                "publicado": row[12],
+                "emailProfesional": row[13]
+            }
+            
+            listaProfesionales.append(jsonDevuelto)
+        conexion.commit()
+        
+        return listaProfesionales
+
+    except pymysql.Error as error:
+        
+        conexion.commit()
+        
+        return("Error al obtener los profesionales, error: ",error)
+
+
+    
+    
+    

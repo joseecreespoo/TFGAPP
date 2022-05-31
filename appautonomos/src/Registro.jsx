@@ -1,52 +1,101 @@
-import "./Inicio.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Logo from './Logo.jsx';
-import BotonAtras from "./BotonAtras";
-import Anuncio from "./Anuncio.jsx";
+import './inicio.css';
+import {Link} from "react-router-dom";
+//import {useState} from 'react';
 
 
 function Registro(){
 
+    //Funcion a implementar posteriormente
+    /*
+    const [file, setFile] = useState();
+
+     
+    function getBase64(file) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            let resultado = reader.result;
+            let arrayDividido = resultado.split(',');
+            setFile(arrayDividido[1]);
+            //console.log(arrayDividido);
+        };
+        reader.onerror = function (error) {
+          console.log('Error: ', error);
+        };
+     }
+     
+     
+
+
+    const saveFile = (e) => {
+        let imagen = e.target.files[0];
+        setFile(getBase64(imagen));
+        console.log(file)
+        //console.log(imagenConvertida);
+      };
+    
+    
+    const enviarDatos1 = (event)=>{
+    event.preventDefault();
+    const url= 'http://127.0.0.1:8000/subirImagenProfesional';
+
+    fetch(url, {
+        method:'POST',
+        mode:'cors',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+            imagenProfesional: file
+        })    
+    }).then(res => res.json())
+    .catch(error => console.error('Error: ',error))
+    .then(response=> console.log('Success: ',response));
+    //window.location.replace("/");
+}
+    */
+
+
+
 
     const enviarDatos = (event)=>{
         event.preventDefault();
-        let form = new FormData(document.getElementById('registro'));
-        let cuerpo = {
-            nombreProfesional: form.get('nombreProfesional'),  
-            apellidosProfesional: form.get('apellidosProfesional'),
-            fechaNacimientoProfesional: form.get('fechaNacimientoProfesional'),
-            profesionProfesional: form.get('profesionProfesional'),
-            telefonoProfesional: form.get('telefonoProfesional'),
-            distritoProfesional: form.get('distritoProfesional'),
-            contrasenaProfesional: form.get('contrasenaProfesional'),
-            descripcionProfesional: form.get('descripcionProfesional'),
-            dniProfesional: form.get('dniProfesional'),
-            direccionProfesional: form.get('direccionProfesional'),
-            precioHoraProfesional: form.get('precioHoraProfesional'),
-            publicado: form.get('publicado'),
-            emailProfesional: form.get('emailProfesional')
-        }
-        
-        
-        const url= 'http://127.0.0.1:8000/crearProfesional';
+        const url= 'http://127.0.0.1:8000/registroProfesional';
 
         fetch(url, {
             method:'POST',
-            data: form,
-    
+            mode:'cors',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                nombreProfesional: document.getElementById('nombreProfesional').value,  
+                apellidosProfesional: document.getElementById('apellidosProfesional').value,
+                fechaNacimientoProfesional: document.getElementById('fechaNacimientoProfesional').value,
+                profesionProfesional: document.getElementById('profesionProfesional').value,
+                telefonoProfesional: document.getElementById('telefonoProfesional').value,
+                distritoProfesional: document.getElementById('distritoProfesional').value,
+                contrasenaProfesional: document.getElementById('contrasenaProfesional').value,
+                descripcionProfesional: document.getElementById('descripcionProfesional').value,
+                dniProfesional: document.getElementById('dniProfesional').value,
+                direccionProfesional: document.getElementById('direccionProfesional').value,
+                precioHoraProfesional: document.getElementById('precioHoraProfesional').value,
+                publicado: document.getElementById('publicado').checked,
+                emailProfesional: document.getElementById('emailProfesional').value,
+            })    
         }).then(res => res.json())
         .catch(error => console.error('Error: ',error))
         .then(response=> console.log('Success: ',response));
-    
+        window.location.href="./login"
     }
+
 
     return(
         <>  
             <Logo></Logo>
             <div className='contenedorForm'>
             <Form id="registro" onSubmit={enviarDatos}>
+                
 
                 <Form.Group className="mb-3">
                     <Form.Label>Nombre</Form.Label>
@@ -146,13 +195,14 @@ function Registro(){
                 </Form.Group>
 
 
-
-                <Button variant="dark" type="submit">
+                <Button variant="dark" type="submit" className="botonRegistro">
                     Registrarme
                 </Button>
+
+                <Link to="/"><Button variant="light">Atrás</Button></Link>
             </Form>
             </div>
-            <BotonAtras></BotonAtras>
+            
 
         </>
 

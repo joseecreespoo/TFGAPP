@@ -3,19 +3,15 @@ from fastapi import FastAPI
 from backend import *
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-
-#establecemos la configuracion para conectarnos por MYSQL a la base de datos
-
-
-
-#generamos la conexion y el cursor, en caso de error devolvemos el error generado
-
-
+##################
+#EXISTEN FUNCIONES SIN USAR PARA IMPLEMENTAR FUNCIONES A POSTERIOR 
+##############
     
 #creamos la api
 
 app = FastAPI()
 
+#guardamos los origenes desde los que no se habilitaran las cors
 
 origins = [
     "http://localhost.tiangolo.com",
@@ -26,6 +22,9 @@ origins = [
     "http://localhost:3000/parrillaAnuncios",
 ]
 
+
+#desactivamos las cors
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -34,15 +33,54 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+#creamos las clases necesarias
 class Login(BaseModel):
     emailProfesional: str
     contrasenaProfesional: str
 
 
+class Profesional(BaseModel):
+    nombreProfesional: str
+    apellidosProfesional: str
+    fechaNacimientoProfesional : str
+    profesionProfesional : str
+    telefonoProfesional : int
+    distritoProfesional : str
+    contrasenaProfesional : str
+    descripcionProfesional : str
+    dniProfesional :str
+    direccionProfesional : str
+    precioHoraProfesional : int
+    publicado : str
+    emailProfesional : str
+    
+class ProfesionalModificar(BaseModel):
+    idProfesional: int
+    nombreProfesional: str
+    apellidosProfesional: str
+    fechaNacimientoProfesional : str
+    profesionProfesional : str
+    telefonoProfesional : int
+    distritoProfesional : str
+    contrasenaProfesional : str
+    descripcionProfesional : str
+    dniProfesional :str
+    direccionProfesional : str
+    precioHoraProfesional : int
+    publicado : str
+    emailProfesional : str
+    
 
 
+    
+class ProfesionalId(BaseModel):
+    idProfesional : str    
+    
+class ProfesionalBuscado(BaseModel):
+    distritoProfesional : str
+    profesionProfesional : str
 
+    
 ################
 #METODOS DE LA API
 #################
@@ -60,10 +98,23 @@ def getMostrarTodosProfesionales():
 
 #crear un profesional
 
-@app.post("/crearProfesional")
+@app.post("/registroProfesional")
 
-def postCrearProfesional(nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,distritoProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,precioHoraProfesional,publicado,emailProfesional):
-    return crearProfesional(nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,distritoProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,precioHoraProfesional,publicado,emailProfesional)
+def postCrearProfesional(profesional:Profesional):
+    return crearProfesional(profesional.nombreProfesional,
+                            profesional.apellidosProfesional,
+                            profesional.fechaNacimientoProfesional,
+                            profesional.profesionProfesional,
+                            profesional.telefonoProfesional,
+                            profesional.distritoProfesional,
+                            profesional.contrasenaProfesional,
+                            profesional.descripcionProfesional,
+                            profesional.dniProfesional,
+                            profesional.direccionProfesional,
+                            profesional.precioHoraProfesional,
+                            profesional.publicado,
+                            profesional.emailProfesional)
+
 
 #eliminar un profesional
 
@@ -76,16 +127,36 @@ def postEliminarProfesional(dniProfesional):
 
 @app.post("/modificarProfesional")
 
-def postModificarProfesional(idProfesional,nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,precioHoraProfesional,publicado,emailProfesional):
-    return modificarProfesional(idProfesional,nombreProfesional,apellidosProfesional,fechaNacimientoProfesional,profesionProfesional,telefonoProfesional,codigoPostalProfesional,contrasenaProfesional,descripcionProfesional,dniProfesional,direccionProfesional,precioHoraProfesional,publicado,emailProfesional)
+def postModificarProfesional(profesionalModificar:ProfesionalModificar):
+    return modificarProfesional(profesionalModificar.idProfesional,
+                            profesionalModificar.nombreProfesional,
+                            profesionalModificar.apellidosProfesional,
+                            profesionalModificar.fechaNacimientoProfesional,
+                            profesionalModificar.profesionProfesional,
+                            profesionalModificar.telefonoProfesional,
+                            profesionalModificar.distritoProfesional,
+                            profesionalModificar.contrasenaProfesional,
+                            profesionalModificar.descripcionProfesional,
+                            profesionalModificar.dniProfesional,
+                            profesionalModificar.direccionProfesional,
+                            profesionalModificar.precioHoraProfesional,
+                            profesionalModificar.publicado,
+                            profesionalModificar.emailProfesional)
 
-@app.post("/buscarProfesional/{distritoProfesional}/{profesionProfesional}")
-async def postBuscarProfesional(distritoProfesional,profesionProfesional):
-    return obtenerProfesional(distritoProfesional,profesionProfesional)
+#busca un profesional
+@app.post("/buscarProfesional")
+async def postBuscarProfesional(profesionalBuscado:ProfesionalBuscado):
+    return obtenerProfesional(profesionalBuscado.distritoProfesional,profesionalBuscado.profesionProfesional)
 
 
 #logea el profesional
 
 @app.post("/loginProfesional")
 def loginProfesional(login:Login):
-    return login
+    return comprobarProfesional(login.emailProfesional,login.contrasenaProfesional)
+
+#comprueba el login
+@app.post("/obtencionLoginProfesional")
+async def obtenerLoginProgesional(profesionalId:ProfesionalId):
+    return obtenerProfesionalId(profesionalId.idProfesional)
+

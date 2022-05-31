@@ -1,8 +1,8 @@
-import "./Inicio.css";
+import './inicio.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from "react-bootstrap/Button"
 import Logo from './Logo.jsx';
-import { Link,Route, Navigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import React, {useState} from 'react';
 
@@ -10,14 +10,14 @@ import React, {useState} from 'react';
 
 function Inicio(){
 
-
+    //Declaramos el estado de los anuncios
 
     const [peticion, setPeticion] = useState({
         codigoPostalProfesional: "",
         profesionProfesional:"",
     });
 
-
+    //captamos los cambios que se ejercen en ellos 
     const handleInputChange = (event) => {
         setPeticion({
             ...peticion,
@@ -38,7 +38,6 @@ function Inicio(){
 
     return(
         <>
-            
             <Logo></Logo>
             <div className='contenedorForm'>
                 <Form id="formPeticion">

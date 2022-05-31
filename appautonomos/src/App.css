@@ -1,22 +1,63 @@
-body{
-  background-color:black;
-  display: flex;
-}
-
 .App{
-  margin: 0;
-  width: 100%;
-  height:max-content;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 20px;
-  justify-content: center;
-  align-items: center;
+    align-items: center;
+    display: flex;
+    height: auto;
+    flex-direction: column;
 }
 
-#root{
-  background-color: grey;
-  border: 1px solid black;
-  bottom: 0;
+/* zona cards */
+
+.App ul{
+    list-style: none;
+
+}
+
+ol, ul {
+    padding-left: 0;
+}
+
+.card{
+    margin:10% auto;
+}
+
+@media (min-width: 1024px){
+    .App{
+        flex-direction: unset;
+    }
+    
+    .contenedor{
+        margin:5%;
+    }
+    
+    .listaProfesionales{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        
+    }
+    
+    .card{
+        margin: auto;
+        margin: 20px;
+    }
+
+}
+
+@media (min-width: 1024px){
+    
+    .listaProfesionales{
+        grid-template-columns: repeat(4, 3fr);
+
+    }
+
+}
+
+@media (min-width: 1440px){
+
+    
+    .listaProfesionales{
+        grid-template-columns: repeat(5, 3fr);
+
+    }
+
 
 }

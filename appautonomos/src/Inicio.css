@@ -1,36 +1,69 @@
-
-.logoStyle{
-    width: 100%
+*{
+    margin: 0;
+    padding: 0;
 }
 
-.contenedorImagen{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+/* zona de login */
 
-.contenedorBotones{
-    margin-top: 80px;
-    width: 100%;
+.contenedorBotones {
+
+    margin-top:40px;
     height: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
     row-gap: 50px;
+
 }
 
 .contenedorForm{
     background-color: white;
-    width: 100%;
+    margin:2% 10%;
     border-radius: 10px;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
-    
+
+
 }
+    
+.botonAtras{
+    padding: 20px;
+}
+
+.btn{
+    width:100%;
+}
+
+/* zona de cards */
+
+
+
+@media (min-width: 1024px){
+    .App{
+        display: flex;
+        
+    }
+    .contenedorBotones {
+        margin:auto;
+        align-items: unset;
+    
+    }
+
+    .contenedorForm{
+        background-color: white;
+        margin:1% 10%;
+        border-radius: 10px;
+        padding: 20px;
+    
+    
+    }
+
+    .botonAtras{
+        padding: 20px;
+        margin-right: 3%;
+    }
+}
+
+    
+
+

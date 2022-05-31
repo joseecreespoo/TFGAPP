@@ -1,14 +1,12 @@
 import logo from './logos/logosinfondo.png'
-import "./Inicio.css";
+import './logo.css'
 
 
 function Logo(){
     return(
 
         <>
-            <div className='contenedorImagen'>
-                <img src={logo} alt="logo" className="logoStyle"/>
-            </div>
+            <img src={logo} alt="logo" className="logo"/>
         </>
 
 

@@ -1,12 +1,16 @@
-import "./Inicio.css";
+import Button from "react-bootstrap/Button";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import BotonAtras from "./BotonAtras";
 import Anuncio from "./Anuncio.jsx";
 import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
+import {Link} from "react-router-dom";
+import "./app.css";
+import Spinner from "./logos/spinner.gif";
+
 
 function ParrillaAnuncios(props){
     
+    //establecemos la busqueda
     let {search} = useLocation();
 
     let [respuesta,setRespuesta] = useState();
@@ -20,18 +24,21 @@ function ParrillaAnuncios(props){
     form.append("profesionProfesional",profesion);
 
 
-
+    //llamamos a la API
     const obtenerRespuesta = async ()  =>{
-        let url= 'http://127.0.0.1:8000/buscarProfesional/'+codigoPostal+'/'+profesion;
+        let url= 'http://127.0.0.1:8000/buscarProfesional';
         await fetch(url,{
             method: 'POST',
-            body: form
-        })
-        .then(response => response.json())
+            mode: 'cors',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                distritoProfesional : codigoPostal,
+                profesionProfesional : profesion,
+            })}).then(response => response.json())
         .then(data => setRespuesta(data))
     }
-    
 
+    //usamos use effect para obtener una respuesta
     useEffect(() => {
         obtenerRespuesta();
         
@@ -41,9 +48,8 @@ function ParrillaAnuncios(props){
     let profesionales;
 
     if(respuesta){
-        console.log(respuesta[0])
         profesionales = respuesta.map(resultado => {
-        return <li key={resultado.idProfesional}>
+        return <li className="profesional" key={resultado.idProfesional}>
         <Anuncio 
         nombre={resultado.nombreProfesional}
         apellidos={resultado.apellidosProfesional} 
@@ -55,7 +61,8 @@ function ParrillaAnuncios(props){
          />
         </li>});
         } else {
-            return <h2>Cargando..</h2>
+            return <div><img src={Spinner} alt="Cargando.."></img>
+            </div>
         }
 
     
@@ -67,10 +74,14 @@ function ParrillaAnuncios(props){
 
     return(
         <>
-            <ul>
-            {profesionales}
-            </ul>
-            <BotonAtras></BotonAtras>
+            <div className="contenedor">
+                <ul className="listaProfesionales">
+                {profesionales}
+                </ul>
+            </div>
+            
+                <Link to="/"className="botonAtras"><Button variant="light">Atrás</Button></Link>
+
         </>
     )
 }
